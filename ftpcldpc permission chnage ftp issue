@@ -1,0 +1,22 @@
+148.145.48.74 (oranproddns)
+
+export VISUAL=vi
+
+ftpcldpc
+#!/bin/sh
+#Change owner of /data1/home-ftp/pub/ftpcldpc
+PATH=/usr/bin:/bin:/sbin:/usr/sbin
+export PATH
+
+cd /home/ftp/pub
+chown -R ftpcldpc:ftpcldpc /data1/home-ftp/pub/ftpcldpc
+
+
+/usr/local/rbin/permission_ftpcldpc.sh
+
+0 6 * * 1-5 /usr/local/rbin/permission_ftpcldpc.sh 2>&1
+
+
+drwxrws---   2 ftpclid  ftpclid      512 Jun 29 05:05 ftpcldpc/
+drwxrws---   5 ftpclid  ftpclid      512 Jun 29 05:05 ftpclid/
+drwxrws---   2 ftpcllpi ftpcllpi    3584 Jun 29 05:05 ftpcllpi/

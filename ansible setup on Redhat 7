@@ -1,0 +1,60 @@
+RHEL 7
+   
+    vi /etc/yum.conf
+   proxy=http://amaprdsymprxelb01.dpi.nsw.gov.au:8080
+    rpm -ivh epel-release-latest-7.noarch.rpm
+    yum install ansible*
+
+Enable root login in the clients
+
+enable root login
+
+vi /etc/ssh/sshd_config
+PermitRootLogin yes					(uncomment PermitRootLogin yes )
+#PasswordAuthentication yes			(comment #PasswordAuthentication yes)
+/etc/init.d/sshd restart
+
+systemctl restart sshd.service		(redhat 7)
+
+Timezone
+
+ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+
+hostname change Redhat
+
+sudo hostnamectl set-hostname --static linuxpoc-2.test.lan
+Add preserve_hostname: true in /etc/cloud/cloud.cfg
+
+Ansible Master SSH key setup
+
+ssh-keygen -t rsa;
+
+
+ssh-copy-id root@10.245.97.190
+ssh-copy-id root@10.245.97.127
+ssh-copy-id root@10.245.97.182
+
+Add host file
+
+10.245.97.190   linuxpoc-1
+10.245.97.127   linuxpoc-2
+10.245.97.182   linuxpoc-3
+
+Edit ansible host file
+
+/etc/ansible/hosts
+
+[AWS_clinets]
+linuxpoc-3
+
+[All_VM]
+linuxpoc-1
+linuxpoc-2
+linuxpoc-3
+
+Check ansible working
+ansible all -i /etc/ansible/hosts -m ping
+ansible all -i /etc/ansible/hosts -m command -a "who"
+ansible all -i /etc/ansible/hosts -m setup |grep -w ansible_distribution
+ansible all -i /etc/ansible/hosts -m command -a "uptime"
+ansible all -i /etc/ansible/hosts -m command -a "uname -a"

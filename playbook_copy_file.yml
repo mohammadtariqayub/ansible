@@ -1,0 +1,29 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab002
+  become_user: root
+
+  tasks:
+    # Purpose of this to check if an pplication is running of stopped
+    - name: copy file from local src to remote system
+      copy: src=/home/mayub/bin/src/sysctl.conf dest=/etc/sysctl.conf
+      copy: src=/home/mayub/bin/src/login.defs dest=/etc/login.defs
+      copy: src=/home/mayub/bin/src/selinux_config dest=/etc/selinux/config
+      copy: src=/home/mayub/bin/src/limits.conf dest=/etc/security/limits.conf
+      copy: src=/home/mayub/bin/src/opasswd dest=/etc/security/opasswd
+     # file: dest:/etc/security/opasswd owner=root group=root mode=0600
+
+    - name: Change permission of /etc/security/opasswd
+      command: chown root:root /etc/security/opasswd
+      command: chmod 0600 /etc/security/opasswd
+
+    - name: copy file from local src to remote system
+      
+      
+
+
+    
+      
+      

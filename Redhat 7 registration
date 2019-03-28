@@ -1,0 +1,6 @@
+subscription-manager register
+subscription-manager attach --auto
+
+
+yum check-update --disablerepo=* --enablerepo=OEL7_latest
+yum check-update --disablerepo=* --enablerepo=local_OEL7_UEKR4

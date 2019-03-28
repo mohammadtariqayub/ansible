@@ -1,0 +1,27 @@
+Host file
+
+[control]
+control ansible_host=192.168.1.80
+
+[web]
+node-1  ansible_host=192.168.1.81
+node-1  ansible_host=192.168.1.82
+
+[infra]
+infra   ansible_host=192.168.1.83
+
+
+Commands
+ansible all -i hosts -m ping
+ansible all -m command -a "uptime"
+ansible all -i hosts -m command -a "who"
+Find distribution
+ansible all -i hosts -m setup |grep -w ansible_distribution
+ansible dc1lab002 -i hosts -m yum -a "name=httpd state=present"
+ansible dc1lab002 -i hosts -m yum -a "name=httpd state=absent"
+For Fedora
+ansible dc1lab004 -i hosts -m dnf -a "name=httpd state=present"
+
+
+
+ansible dc1lab002 -i hosts -m yum -a "name=httpd state=present"

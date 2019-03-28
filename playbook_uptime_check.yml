@@ -1,0 +1,16 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab004
+  become_user: root
+
+# This task is to confirm, that system is up and responding to ssh
+
+  tasks:
+  - name: check uptime
+   # command: "uptime"
+  #  register: out
+    shell: uptime 
+    register: out
+  - debug: var=out.stdout_lines 

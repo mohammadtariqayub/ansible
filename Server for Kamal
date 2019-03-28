@@ -1,0 +1,37 @@
+Server for Kamal
+test vpc
+
+amatstvdclinux
+
+amatstvdclinux.dpi.nsw.gov.au
+
+AWS Linux
+1 vCPU
+2 GB RAM
+
+IP : 
+10.245.96.139
+
+from ansible
+ssh-copy-id root@10.245.96.139
+
+oranprodnfs
+
+cat $HOME/.ssh/id_rsa.pub | ssh 10.245.96.139 'cat >> .ssh/authorized_keys && echo "Key uploaded successfully."'
+
+create Kamal's account in amatstvdclinux
+useradd -u 12509 -G wheel -c "Kamaljit Bhardwaj VDC Admin" -m -d /home/bhardwk -s /bin/bash bhardwk
+
+amapxymon01c (login as bhardwk)
+ssh-keygen -t rsa
+ssh-copy-id bhardwk@10.245.96.139
+
+Hi Kamal,
+
+Option 1:
+
+Please login to amaprxymon1c (10.245.85.34) with user name bhardwk and password "welcome1". Plesae reset password using passwd command. then type sudo su -. It will ask for password again. please give your new password. then type "ssh oranprodnfs". it will ask for password of oranprodnfs. password is (/sO15fr;). Then type "ssh amatstvdclinux". It will take you to the server.
+
+Option 2:
+
+Please login to amaprxymon1c (10.245.85.34) with user name bhardwk and password "welcome1". Plesae reset password using passwd command. then type "ssh amatstvdclinux." When you need to access server as root type su - (passord is H1ghneck)

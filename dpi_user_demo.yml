@@ -1,0 +1,27 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: AWS_clinets
+  become_user: root
+  vars:
+
+#Password set with mypassword
+#python -c 'import crypt; print crypt.crypt("mypassword", "$1$SomeSalt$")'
+   password: $1$SomeSalt$1i7aDGPA4LH8LcXRPdO5X1
+
+  tasks:
+# Creating user and groups
+  - group: name=admingroup1 gid=1151 state=present
+  - group: name=admingroup2 gid=1152 state=present
+  - group: name=admingroup3 gid=1153 state=present
+  - user: name=mayub uid=2001 group=admingroup1 groups=admingroup2,admingroup3 shell=/bin/bash comment="Mohammad Tariq Ayub" password={{password}} state=present
+  - user: name=admin1 uid=2002 group=admingroup2 groups=admingroup3 shell=/bin/bash comment="Admin User 1" password={{password}} state=present
+  - user: name=admin2 uid=2003 group=admingroup2 groups=admingroup3 shell=/bin/bash comment="Admin user 2" password={{password}} state=present
+
+#Send mail once script finished
+  - mail:
+     from: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     to: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     subject: Ansible-report
+     body: 'System {{ ansible_hostname }} has been successfully provisioned.'

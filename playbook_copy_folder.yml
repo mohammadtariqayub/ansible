@@ -1,0 +1,23 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab004
+  become_user: root
+
+#This will copy folder and its contend to remote server
+#src=/home/mayub/backup will create folder and copy files
+#src=/home/mayub/backup/ will only copy file
+
+  tasks:
+  #- copy: src=/home/mayub/backup dest=/home/mayub # will copy playbooks to client
+  - service: name=firewalld enabled=no
+  - service: name=firewalld state=stopped
+  
+  - mail:
+     from: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     to: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     subject: Ansible-report
+     body: 'System {{ ansible_hostname }} has been successfully provisioned.'
+    delegate_to: localhost
+ 

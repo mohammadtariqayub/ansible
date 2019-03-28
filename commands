@@ -1,0 +1,5 @@
+ - name: restart apache
+    command: service httpd restart
+    ansible-playbook -i hosts -s playbook_patching.yml
+
+KERNEL_NEW=$(rpm -q --last kernel-uek |head -1 | awk '{print $1}' |sed 's/kernel-uek//') ; KERNEL_NOW=$(uname -r) ; if [[ $KERNEL_NEW != $KERNEL_NOW ]] ; then echo "reboot_needed" ; else echo "reboot_not_needed"; fi

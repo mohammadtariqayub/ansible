@@ -1,0 +1,17 @@
+ ayubm::22602:500:Mohammad Tariq Ayub:/home/agnet/ayubm:/usr/local/bin/bash
+
+PLEASE NOTE:
+Unix authentication has been moved to Active Directory - please
+do NOT enter a NIS password for any Unix account. If the account does not exist
+in AD (e.g. a system account) it should be created locally on the relevant
+Unix host(s) and password set at local level.
+Press <return> to continue or Q to quit
+
+
+ New password for Mohammad Tariq Ayub (ayubm):  x5swhv
+
+updated passwd
+nis server not registered at sydgdcprdldc5.
+nis server not registered at sydgdcprdldc5.
+pushed passwd
+

@@ -1,0 +1,21 @@
+---
+- hosts: dc2lab002
+  vars:
+   #Password set with mypassword
+   #python -c 'import crypt; print crypt.crypt("mypassword", "$1$SomeSalt$")'
+   password: $1$SomeSalt$1i7aDGPA4LH8LcXRPdO5X1
+  
+  tasks:
+  - group: name=srcadm gid=1151 state=present
+  - group: name=secure gid=1101 state=present
+  - group: name=faiprod gid=1200 state=present
+  - group: name=faidev gid=1201 state=present
+  - group: name=dba gid=1206 state=present
+  - user: name=mayub uid=1195 group=faiprod groups=secure,faidev shell=/bin/bash comment="Oracle User" password={{password}} state=present
+  - user: name=oracle uid=1106 group=dba groups=secure shell=/bin/bash comment="Oracle User" password={{password}} state=present
+  #- user: name=oracle uid=1106 groups=dba,secure shell=/bin/bash comment="Oracle User" password={{password}} state=absent
+  - user: name=astead uid=1711 group=faiprod groups=faidev,secure shell=/bin/bash comment="Ashley Stead" password={{password}} state=present
+  - user: name=bill uid=1712 group=faidev groups=faiprod,secure shell=/bin/bash comment="Bill Jow" password={{password}} state=present
+  
+  
+

@@ -1,0 +1,22 @@
+---
+- hosts: dc1lab002
+  tasks:
+
+  - name: Insall epel repo  
+    yum: name=epel-release state=present
+ 
+  - name: install puthon bindings for SELinux
+    yum: name={{item}} state=present
+    with_items:
+    - libselinux-python
+    - libsemanage-python
+
+  - name: Install telnet
+    yum: name=telnet* state=present
+
+  - name: Install samba packages
+    yum: name=samba* state=present
+
+  - name: Install apache
+    yum: name=httpd state=present
+ 

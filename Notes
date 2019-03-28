@@ -1,0 +1,7 @@
+Notes for Fedora
+need to install python and python2-dnf
+
+yum install python python2-dnf
+ansible dc1lab004 -i hosts -m dnf -a "name=httpd state=present"
+
+python -c 'import crypt; print crypt.crypt("mypassword", "$1$SomeSalt$")'

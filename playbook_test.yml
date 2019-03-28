@@ -1,0 +1,12 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab004
+  become_user: root
+  vars:
+
+  tasks:
+  - name: Update server with latest software
+    yum: name=* state=latest
+  #  yum: name=* enablerepo=ol7_latest state=latest

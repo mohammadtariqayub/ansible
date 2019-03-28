@@ -1,0 +1,14 @@
+---
+- hosts: dc1lab002
+  tasks:
+  - group: name=srcadm gid=1151 state=present
+  - group: name=secure gid=1101 state=present
+  - group: name=faiprod gid=1200 state=present
+  - group: name=faidev gid=1201 state=present
+  - group: name=dba gid=1206 state=present
+  - user: name=oracle uid=1106 groups=dba,secure shell=/bin/bash comment="Oracle User" state=absent
+ # - user: name=oracle uid=1106 groups=dba,secure shell=/bin/bash comment="Oracle User" state=absent
+  - user: name=astead uid=1711 groups=faiprod,faidev,secure shell=/bin/bash comment="Ashley Stead" state=absent
+  
+  
+

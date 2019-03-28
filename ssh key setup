@@ -1,0 +1,10 @@
+ssh-keygen -t rsa
+
+
+ssh-copy-id root@192.168.1.71
+ssh-copy-id root@192.168.1.80
+ssh-copy-id root@192.168.1.81
+ssh-copy-id root@192.168.1.82
+ssh-copy-id root@192.168.1.83
+
+ssh-copy-id root@192.168.1.73

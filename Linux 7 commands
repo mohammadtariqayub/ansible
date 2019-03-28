@@ -1,0 +1,65 @@
+List all service
+
+systemctl list-unit-files --type service
+
+Enable service
+chkconfig name on  
+systemctl enable name.service
+
+Disables a service.
+chkconfig name off
+systemctl disable name.service
+
+Checks if a service is enabled.
+chkconfig --list name
+systemctl status name.service
+
+Starts a service.
+service name start
+systemctl start name.service
+
+service name stop
+systemctl stop name.service
+Stops a service.
+
+
+systemctl enable smb 
+systemctl disable smb 
+systemctl start smb
+
+systemctl status smb.service
+systemctl list-unit-files
+
+systemctl enable telnet.socket
+systemctl start telnet.socket
+systemctl stop telnet.socket
+systemctl status telnet.socket
+
+service samba status
+
+systemctl disable firewalld
+service firewalld stop
+service firewalld start
+
+Disable selinux
+
+Disable virbr0
+
+virsh net-undefine default
+
+kernel loader change
+
+grubby --default-kernel
+grubby --default-index
+
+look for kernel in /boot
+
+grubby --set-default /boot/vmlinuz-3.10.0-229.4.2.el7.x86_64
+
+Seeting hostname AWS Redhat 7
+
+sudo hostnamectl set-hostname --static linuxpoc-2.test.lan
+Add preserve_hostname: true in /etc/cloud/cloud.cfg
+
+
+

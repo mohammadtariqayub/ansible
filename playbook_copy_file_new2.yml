@@ -1,0 +1,18 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab002
+  become_user: root
+
+  tasks:
+  
+  - file: path=/home/mayub/testfile1.conf owner=root group=root mode=0666   
+      
+ 
+  
+
+
+    
+      
+      

@@ -1,0 +1,66 @@
+---
+### This script will copy file from local repo to remote system
+### Developed by Mohammad Tariq Ayub. mohammad.tariq.ayub@outlook.com Date 01/05/2017
+
+- hosts: dc2lab004
+  become_user: root
+  vars:
+
+#Password set with mypassword
+#python -c 'import crypt; print crypt.crypt("mypassword", "$1$SomeSalt$")'
+   password: $1$SomeSalt$1i7aDGPA4LH8LcXRPdO5X1
+
+  tasks:
+  - name: Update server with latest software
+    yum: name=* state=latest
+
+# Creating user and groups
+  - group: name=srcadm gid=1151 state=present
+  - group: name=secure gid=1101 state=present
+  - group: name=faiprod gid=1200 state=present
+  - group: name=faidev gid=1201 state=present
+  - group: name=dba gid=1206 state=present
+  - user: name=mayub uid=1195 group=faiprod groups=secure,faidev shell=/bin/bash comment="Oracle User" password={{password}} state=present
+  - user: name=oracle uid=1106 group=dba groups=secure shell=/bin/bash comment="Oracle User" password={{password}} state=present
+  - user: name=astead uid=1711 group=faiprod groups=faidev,secure shell=/bin/bash comment="Ashley Stead" password={{password}} state=present
+  - user: name=bill uid=1712 group=faidev groups=faiprod,secure shell=/bin/bash comment="Bill Jow" password={{password}} state=present
+
+# Copying required file
+  - copy: src=/home/mayub/bin/src/sysctl.conf dest=/etc/sysctl.conf 
+  - copy: src=/home/mayub/bin/src/login.defs dest=/etc/login.defs
+  - copy: src=/home/mayub/bin/src/selinux_config dest=/etc/selinux/config
+  - copy: src=/home/mayub/bin/src/limits.conf dest=/etc/security/limits.conf
+  - copy: src=/home/mayub/bin/src/opasswd dest=/etc/security/opasswd
+  - file: path=/etc/security/opasswd owner=root group=root mode=0600
+  - copy: src=/home/mayub/bin/src/system-auth dest=/etc/pam.d/system-auth
+  - copy: src=/home/mayubroot/playbook_* dest=/home/mayub  
+
+#Disable and stop unwanted services
+  - service: name=firewalld enabled=no
+  - service: name=firewalld state=stopped
+
+# This will reboot the system
+  - name: reboot system
+    command: shutdown -r +1 "Rebooting System After patching"
+
+# This task will wait for theree minsute for the system to come up
+  - name: paues for 180 sec
+    pause: 
+      minutes: 3
+
+    # This task is to confirm, that system is up and responding to ssh
+  - name: check uptime
+    command: "uptime"
+    register: out
+
+  - debug: var=out.stdout_lines
+
+#Send mail once script finished
+  - mail:
+     from: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     to: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     subject: Ansible-report
+     body: 'System {{ ansible_hostname }} has been successfully provisioned.'
+    delegate_to: localhost
+ 
+  

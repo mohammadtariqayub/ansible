@@ -1,0 +1,72 @@
+---
+- hosts: dc2lab004
+  become_user: root
+                                                            # set to specific inventory host group or set to all for every host in inventory for play
+  vars:
+    config_lvm: true                                        # must be set to true in order to execute any tasks in play (failsafe option :)- )
+    create: true                                            # set to true if creating a new logical volume (do not set extend or resize to true)
+    resize: false                                           # set to true if resizing the logical volume (do not set create to true)
+    extend: false                                           # set to true if extending the logical volume (do not set create to true)
+    current_disk: '/dev/sda5'                               # set to your current disk device already setup in lvm
+    new_disk: '/dev/sdb'                                    # set to new disk being added to volume group
+    new_mntp0: '/ora_00'                                    # set to the desired mount point to be created and new logical volume to be mounted to
+    new_mntp1: '/ora_01'
+    new_mntp2: '/ora_02'
+    new_mntp3: '/ora_03'
+    new_mntp4: '/ora_log'
+    create_vgname: 'vg_oracle'                               # set to volume group name to create
+    resize_vgname: 'vg_oracle'                               # set to volume group name to resize
+    extend_vgname: 'vg_oracle'                               # set to volume group name to extend
+    create_lvname0: 'vg_oracle-lv00'                         # set to logical volume name to create
+    create_lvname1: 'vg_oracle-lv01' 
+    create_lvname2: 'vg_oracle-lv02' 
+    create_lvname3: 'vg_oracle-lv03' 
+    create_lvname4: 'vg_oracle-lv04' 
+    resize_lvname: 'test-lv'                                # set to logical volume name to resize
+    extend_lvname: 'test-lv'                                # set to logical volume name to extend
+    create_lvsize: '16m'                                    # set to logical volume size to create --- (10G) - would create new lvm with 10Gigabytes -- (512) - would create new lvm with 512m
+    extend_disks: '{{ current_disk }},{{ new_disk }}'       # first disk is current volume group
+    lvextend_options: '-L+10mG'                             # setting the options to pass to lvextend --- ('-L+10G') - would increase by 10GB whereas ('-l +100%FREE') would increase to full capacity
+    filesystem: 'ext4' 
+
+  tasks:
+
+  #- name: creating new LVM volume group
+  - lvg: vg={{ create_vgname }} pvs={{ new_disk }} pesize=8 state=present
+
+  #- name: creating new LVM logical volume
+  - lvol: vg={{ create_vgname }} lv={{ create_lvname0 }} size={{ create_lvsize }}
+  - lvol: vg={{ create_vgname }} lv={{ create_lvname1 }} size={{ create_lvsize }}
+  - lvol: vg={{ create_vgname }} lv={{ create_lvname2 }} size={{ create_lvsize }}
+  - lvol: vg={{ create_vgname }} lv={{ create_lvname3 }} size={{ create_lvsize }}
+  - lvol: vg={{ create_vgname }} lv={{ create_lvname4 }} size={{ create_lvsize }}
+
+  #- name: creating new filesystem on new LVM logical volume
+  - filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname0 }}
+  - filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname1 }}
+  - filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname2 }}
+  - filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname3 }}
+  - filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname4 }}
+
+  #Chnage permission
+  - file: path=/ora_00 owner=oracle group=dba mode=0775
+  - file: path=/ora_01 owner=oracle group=dba mode=0775
+  - file: path=/ora_02 owner=oracle group=dba mode=0775
+  - file: path=/ora_03 owner=oracle group=dba mode=0775
+  - file: path=/ora_log owner=oracle group=dba mode=0775
+
+  #- name: mounting new filesystem
+  - file: path=/etc/security/opasswd owner=root group=root mode=0600
+  - mount: name={{ new_mntp0 }} src=/dev/{{ create_vgname }}/{{ create_lvname0 }} fstype={{ filesystem }} state=mounted
+  - mount: name={{ new_mntp1 }} src=/dev/{{ create_vgname }}/{{ create_lvname1 }} fstype={{ filesystem }} state=mounted
+  - mount: name={{ new_mntp2 }} src=/dev/{{ create_vgname }}/{{ create_lvname2 }} fstype={{ filesystem }} state=mounted
+  - mount: name={{ new_mntp3 }} src=/dev/{{ create_vgname }}/{{ create_lvname3 }} fstype={{ filesystem }} state=mounted
+  - mount: name={{ new_mntp4 }} src=/dev/{{ create_vgname }}/{{ create_lvname4 }} fstype={{ filesystem }} state=mounted
+  
+  #Send mail once script finished
+  - mail:
+     from: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     to: Mohammad Tariq Ayub <mohammad.tariq.ayub@outlook.com>
+     subject: Ansible-report
+     body: ' {{ ansible_hostname }} File System been successfully created.'
+    delegate_to: localhost

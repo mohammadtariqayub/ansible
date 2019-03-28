@@ -1,0 +1,28 @@
+---
+- name: Install and start apache
+hosts:web
+vars:
+    http_port: 80
+    max_clients: 200
+remote_user: root
+
+tasks:
+- name: Insall epel repo  
+ yum: name=epel-release state=present
+ 
+- name: install puthon bindings for SELinux
+  yum: name={{item}} state=present
+  with_items:
+  - libselinux-python
+  - libsemanage-python
+  
+-name: Tet to see if SELinux is running
+  command:getenforce
+  register:sestatus
+  chnaged_when: false
+
+- name: Install httpd
+  yum: pkg=httpd state=latest
+  
+-name: start httpd
+  service: name=httpd state=started enabled=yes
